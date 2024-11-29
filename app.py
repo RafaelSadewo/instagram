@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import logging
+import os
 
 app = Flask(__name__)
 CORS(app)  # Tambahkan CORS sebelum mendefinisikan route
@@ -14,6 +15,9 @@ login_data = []
 @app.route('/')
 def index():
     logging.debug("Rendering login page")
+    app.logger.info("Rendering login page...")
+    app.logger.info(f"Current directory: {os.getcwd()}")
+    app.logger.info(f"Template folder: {app.template_folder}")
     # Tampilkan halaman login
     return render_template('login.html')
 
@@ -41,17 +45,4 @@ def view_data():
     return render_template('view_data.html', login_data=login_data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
-import os
-
-@app.route('/')
-def index():
-    app.logger.info("Rendering login page...")
-    app.logger.info(f"Current directory: {os.getcwd()}")
-    app.logger.info(f"Template folder: {app.template_folder}")
-    return render_template('login.html')
-
-@app.route('/')
-def index():
-    return "Login Page (debug mode)"
+    app.run(host='0.0.0.0', port=5000, debug=True)
